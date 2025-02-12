@@ -2,6 +2,7 @@ import os
 from typing import List, TypedDict
 
 import requests
+from loguru import logger
 from smolagents import tool
 
 
@@ -33,24 +34,37 @@ def search_flickr_photos(text: str, latitude: float, longitude: float, radius: i
         longitude: Location longitude
         radius: Search radius in km (default 5)
     """
-    api_key = os.getenv("FLICKR_API_KEY")
-    if not api_key:
-        raise ValueError("FLICKR_API_KEY environment variable not set")
+    try:
+        api_key = os.getenv("FLICKR_API_KEY")
+        if not api_key:
+            logger.error("FLICKR_API_KEY environment variable not set")
+            raise ValueError("FLICKR_API_KEY environment variable not set")
 
-    url = "https://www.flickr.com/services/rest/"
-    params = {
-        "method": "flickr.photos.search",
-        "api_key": api_key,
-        "text": text,
-        "lat": latitude,
-        "lon": longitude,
-        "radius": radius,
-        "format": "json",
-        "nojsoncallback": 1,
-    }
+        url = "https://www.flickr.com/services/rest/"
+        params = {
+            "method": "flickr.photos.search",
+            "api_key": api_key,
+            "text": text,
+            "lat": latitude,
+            "lon": longitude,
+            "radius": radius,
+            "format": "json",
+            "nojsoncallback": 1,
+        }
 
-    response = requests.get(url, params=params)
-    response.raise_for_status()
-    data: FlickrResponse = response.json()
+        response = requests.get(url, params=params)
+        response.raise_for_status()
+        data: FlickrResponse = response.json()
 
-    return data["photos"]["photo"]
+        if data.get("stat") != "ok":
+            error_msg = data.get("message", "Unknown Flickr API error")
+            logger.error(f"Flickr API returned error: {error_msg}")
+            raise ValueError(f"Flickr API error: {error_msg}")
+
+        return data["photos"]["photo"]
+    except requests.RequestException as e:
+        logger.error(f"Failed to fetch photos from Flickr: {str(e)}")
+        raise RuntimeError(f"Failed to fetch photos from Flickr: {str(e)}") from e
+    except (KeyError, TypeError) as e:
+        logger.error(f"Invalid photo data received from Flickr: {str(e)}")
+        raise ValueError(f"Invalid photo data received from Flickr: {str(e)}") from e
