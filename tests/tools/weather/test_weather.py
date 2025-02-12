@@ -2,6 +2,7 @@ import os
 from unittest.mock import MagicMock, patch
 
 import pytest
+import requests
 
 from shutterscout_ai.tools.weather.weather import get_weather_forecast
 
@@ -76,7 +77,7 @@ def test_get_weather_forecast_missing_api_key():
 def test_get_weather_forecast_api_error(mock_env_api_key):
     """Test error handling when API request fails"""
     with patch("requests.get") as mock_get:
-        mock_get.side_effect = Exception("API Error")
+        mock_get.side_effect = requests.RequestException("API Error")
 
         with pytest.raises(RuntimeError, match="Failed to fetch weather forecast"):
             get_weather_forecast(51.9187, 4.364)
