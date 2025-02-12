@@ -1,6 +1,6 @@
 from unittest.mock import patch
 import pytest
-from shutterscout_ai.tools.astronomy.astronomy import get_sun_times, SunTimes
+from shutterscout_ai.tools.astronomy.astronomy import get_sunrise_sunset, SunTimes
 
 
 @pytest.fixture
@@ -15,12 +15,12 @@ def mock_sun_response():
     }
 
 
-def test_get_sun_times(mock_sun_response):
+def test_get_sunrise_sunset(mock_sun_response):
     with patch('requests.get') as mock_get:
         mock_get.return_value.json.return_value = mock_sun_response
         mock_get.return_value.raise_for_status.return_value = None
         
-        result = get_sun_times(51.9187, 4.364)
+        result = get_sunrise_sunset(51.9187, 4.364)
         
         assert isinstance(result, SunTimes)
         assert result.sunrise == "7:00:00 AM"
@@ -32,9 +32,9 @@ def test_get_sun_times(mock_sun_response):
         )
 
 
-def test_get_sun_times_error():
+def test_get_sunrise_sunset_error():
     with patch('requests.get') as mock_get:
         mock_get.return_value.raise_for_status.side_effect = Exception("API Error")
         
         with pytest.raises(Exception, match="API Error"):
-            get_sun_times(51.9187, 4.364)
+            get_sunrise_sunset(51.9187, 4.364)

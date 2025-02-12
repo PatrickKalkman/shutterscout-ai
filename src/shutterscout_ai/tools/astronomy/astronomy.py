@@ -15,7 +15,7 @@ class SunTimes:
 
 
 @tool
-def get_sun_times(latitude: float, longitude: float) -> SunTimes:
+def get_sunrise_sunset(latitude: float, longitude: float) -> SunTimes:
     """
     Get sunrise and sunset times for a given location using the sunrise-sunset.org API.
     Returns times in UTC.
