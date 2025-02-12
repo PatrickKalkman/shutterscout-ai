@@ -1,7 +1,9 @@
 import os
-from typing import TypedDict, List
+from typing import List, TypedDict
+
 import requests
 from smolagents import tool
+
 
 class FlickrPhoto(TypedDict):
     id: str
@@ -14,15 +16,17 @@ class FlickrPhoto(TypedDict):
     isfriend: int
     isfamily: int
 
+
 class FlickrResponse(TypedDict):
     photos: dict
     stat: str
+
 
 @tool
 def search_flickr_photos(text: str, latitude: float, longitude: float, radius: int = 5) -> List[FlickrPhoto]:
     """
     Search for photos on Flickr based on text query and location.
-    
+
     Args:
         text: Search text query
         latitude: Location latitude
@@ -42,11 +46,11 @@ def search_flickr_photos(text: str, latitude: float, longitude: float, radius: i
         "lon": longitude,
         "radius": radius,
         "format": "json",
-        "nojsoncallback": 1
+        "nojsoncallback": 1,
     }
 
     response = requests.get(url, params=params)
     response.raise_for_status()
     data: FlickrResponse = response.json()
-    
+
     return data["photos"]["photo"]
