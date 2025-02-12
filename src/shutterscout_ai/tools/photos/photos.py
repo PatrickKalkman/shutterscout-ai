@@ -91,21 +91,19 @@ def get_photo_urls(photos: List[FlickrPhoto], size: Optional[PhotoSize] = None) 
         photos: List of Flickr photos from search_flickr_photos
         size: Optional photo size (default is medium 500px)
     """
-    urls = []
-    size_suffix = f"_{size.value}" if size and size.value else ""
-    
-    for photo in photos:
-        url = f"https://farm{photo['farm']}.staticflickr.com/{photo['server']}/{photo['id']}_{photo['secret']}{size_suffix}.jpg"
-        urls.append({
-            "id": photo["id"],
-            "title": photo["title"],
-            "url": url
-        })
-    
-    return urls
-    except requests.RequestException as e:
-        logger.error(f"Failed to fetch photos from Flickr: {str(e)}")
-        raise RuntimeError(f"Failed to fetch photos from Flickr: {str(e)}") from e
+    try:
+        urls = []
+        size_suffix = f"_{size.value}" if size and size.value else ""
+        
+        for photo in photos:
+            url = f"https://farm{photo['farm']}.staticflickr.com/{photo['server']}/{photo['id']}_{photo['secret']}{size_suffix}.jpg"
+            urls.append({
+                "id": photo["id"],
+                "title": photo["title"],
+                "url": url
+            })
+        
+        return urls
     except (KeyError, TypeError) as e:
-        logger.error(f"Invalid photo data received from Flickr: {str(e)}")
-        raise ValueError(f"Invalid photo data received from Flickr: {str(e)}") from e
+        logger.error(f"Invalid photo data format: {str(e)}")
+        raise ValueError(f"Invalid photo data format: {str(e)}") from e
