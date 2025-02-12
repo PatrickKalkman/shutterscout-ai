@@ -1,7 +1,9 @@
-from unittest.mock import patch, MagicMock
 import os
+from unittest.mock import MagicMock, patch
+
 import pytest
-from shutterscout_ai.tools.weather import get_weather_forecast
+
+from shutterscout_ai.tools.weather.weather import get_weather_forecast
 
 
 @pytest.fixture
@@ -28,7 +30,7 @@ def sample_weather_response():
                         "sunsetTime": "2025-02-12T16:54:00Z",
                         "windSpeedAvg": 1.6,
                         "humidityAvg": 92,
-                    }
+                    },
                 }
             ]
         }
@@ -37,7 +39,7 @@ def sample_weather_response():
 
 def test_get_weather_forecast_success(mock_env_api_key, sample_weather_response):
     """Test successful weather forecast retrieval"""
-    with patch('requests.get') as mock_get:
+    with patch("requests.get") as mock_get:
         mock_response = MagicMock()
         mock_response.json.return_value = sample_weather_response
         mock_get.return_value = mock_response
@@ -73,19 +75,19 @@ def test_get_weather_forecast_missing_api_key():
 
 def test_get_weather_forecast_api_error(mock_env_api_key):
     """Test error handling when API request fails"""
-    with patch('requests.get') as mock_get:
+    with patch("requests.get") as mock_get:
         mock_get.side_effect = Exception("API Error")
-        
+
         with pytest.raises(RuntimeError, match="Failed to fetch weather forecast"):
             get_weather_forecast(51.9187, 4.364)
 
 
 def test_get_weather_forecast_invalid_response(mock_env_api_key):
     """Test error handling when API returns invalid data"""
-    with patch('requests.get') as mock_get:
+    with patch("requests.get") as mock_get:
         mock_response = MagicMock()
         mock_response.json.return_value = {"invalid": "response"}
         mock_get.return_value = mock_response
-        
+
         with pytest.raises(ValueError, match="Invalid API response format"):
             get_weather_forecast(51.9187, 4.364)
