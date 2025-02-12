@@ -1,0 +1,136 @@
+name: CI
+
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
+  workflow_dispatch:
+
+jobs:
+  notify-start:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send workflow start notification
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            🚀 CI Workflow Started
+            
+            Repository: ${{ github.repository }}
+            Branch: ${{ github.ref_name }}
+            Triggered by: ${{ github.actor }}
+            Event: ${{ github.event_name }}
+
+  test:
+    needs: notify-start
+    runs-on: macos-14
+    strategy:
+      matrix:
+        python-version: ["3.11"]
+
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install system dependencies
+        run: brew install portaudio
+      
+      - name: Install uv
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+      
+      - name: Lint with ruff
+        run: uv run ruff check src tests
+      
+      - name: Run tests
+        run: uv run pytest tests/
+
+  notify-test:
+    needs: test
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Send test results notification
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            🧪 Test Phase Complete
+            
+            Status: ${{ needs.test.result }}
+            Python Tests: ${{ needs.test.result == 'success' && '✅ Passed' || '❌ Failed' }}
+
+  build:
+    needs: test
+    runs-on: macos-14
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+      
+      - name: Install system dependencies
+        run: brew install portaudio
+      
+      - name: Install uv
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+      
+      - name: Build package
+        run: uv run hatch build
+      
+      - name: Get package metadata
+        id: metadata
+        run: |
+          echo "pkg_name=$(uv run python -c "import tomli; print(tomli.load(open('pyproject.toml', 'rb'))['project']['name'])")" >> $GITHUB_OUTPUT
+          echo "version=$(uv run python -c "import tomli; print(tomli.load(open('pyproject.toml', 'rb'))['project']['version'])")" >> $GITHUB_OUTPUT
+      
+      - name: Store build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.metadata.outputs.pkg_name }}-${{ steps.metadata.outputs.version }}
+          path: dist/
+          retention-days: 5
+      
+      - name: Set build outputs
+        id: build_info
+        run: |
+          echo "pkg_name=${{ steps.metadata.outputs.pkg_name }}" >> $GITHUB_OUTPUT
+          echo "version=${{ steps.metadata.outputs.version }}" >> $GITHUB_OUTPUT
+
+  notify-complete:
+    needs: [build, test]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Send final status notification
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            📦 CI Workflow Complete
+            
+            Test Status: ${{ needs.test.result }}
+            Build Status: ${{ needs.build.result }}
+            
+            Repository: ${{ github.repository }}
+            Branch: ${{ github.ref_name }}
+            Commit: ${{ github.sha }}
+            Triggered by: ${{ github.actor }}
+            
+            ${{ github.event.head_commit.message }}
