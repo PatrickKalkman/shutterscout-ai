@@ -1,9 +1,21 @@
 import os
-from typing import List, TypedDict
+from enum import Enum
+from typing import List, TypedDict, Optional
 
 import requests
 from loguru import logger
 from smolagents import tool
+
+
+class PhotoSize(str, Enum):
+    SMALL_SQUARE = "s"  # 75x75
+    LARGE_SQUARE = "q"  # 150x150
+    THUMBNAIL = "t"     # 100 on longest side
+    SMALL = "m"        # 240 on longest side
+    MEDIUM = ""        # 500 on longest side
+    LARGE = "b"        # 1024 on longest side
+    LARGE_1600 = "h"   # 1600 on longest side
+    LARGE_2048 = "k"   # 2048 on longest side
 
 
 class FlickrPhoto(TypedDict):
@@ -21,6 +33,12 @@ class FlickrPhoto(TypedDict):
 class FlickrResponse(TypedDict):
     photos: dict
     stat: str
+
+
+class PhotoUrl(TypedDict):
+    id: str
+    title: str
+    url: str
 
 
 @tool
@@ -62,6 +80,29 @@ def search_flickr_photos(text: str, latitude: float, longitude: float, radius: i
             raise ValueError(f"Flickr API error: {error_msg}")
 
         return data["photos"]["photo"]
+
+
+@tool
+def get_photo_urls(photos: List[FlickrPhoto], size: Optional[PhotoSize] = None) -> List[PhotoUrl]:
+    """
+    Convert Flickr photo data into actual photo URLs.
+    
+    Args:
+        photos: List of Flickr photos from search_flickr_photos
+        size: Optional photo size (default is medium 500px)
+    """
+    urls = []
+    size_suffix = f"_{size.value}" if size and size.value else ""
+    
+    for photo in photos:
+        url = f"https://farm{photo['farm']}.staticflickr.com/{photo['server']}/{photo['id']}_{photo['secret']}{size_suffix}.jpg"
+        urls.append({
+            "id": photo["id"],
+            "title": photo["title"],
+            "url": url
+        })
+    
+    return urls
     except requests.RequestException as e:
         logger.error(f"Failed to fetch photos from Flickr: {str(e)}")
         raise RuntimeError(f"Failed to fetch photos from Flickr: {str(e)}") from e
