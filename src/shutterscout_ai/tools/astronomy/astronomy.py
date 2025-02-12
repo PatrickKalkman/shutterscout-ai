@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+
 import requests
 from smolagents import tool
 
@@ -6,6 +7,7 @@ from smolagents import tool
 @dataclass
 class SunTimes:
     """Class to hold sunrise and sunset times"""
+
     sunrise: str
     sunset: str
     day_length: str
@@ -22,15 +24,11 @@ def get_sun_times(latitude: float, longitude: float) -> SunTimes:
         longitude: The longitude of the location
     """
     url = f"https://api.sunrise-sunset.org/json?lat={latitude}&lng={longitude}&date=today"
-    
+
     response = requests.get(url)
     response.raise_for_status()
-    
+
     data = response.json()
     results = data["results"]
-    
-    return SunTimes(
-        sunrise=results["sunrise"],
-        sunset=results["sunset"],
-        day_length=results["day_length"]
-    )
+
+    return SunTimes(sunrise=results["sunrise"], sunset=results["sunset"], day_length=results["day_length"])
