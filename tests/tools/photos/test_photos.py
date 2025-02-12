@@ -17,5 +17,5 @@ def test_search_flickr_photos_missing_api_key():
 def test_search_flickr_photos_invalid_api_key(monkeypatch):
     monkeypatch.setenv("FLICKR_API_KEY", "invalid_key")
 
-    with pytest.raises(requests.exceptions.HTTPError):
+    with pytest.raises(ValueError, match="Flickr API error: Invalid API Key"):
         search_flickr_photos("test", 51.9187, 4.364)
