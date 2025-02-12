@@ -1,10 +1,12 @@
 from typing import TypedDict
+
 import requests
 from smolagents import tool
 
 
 class LocationInfo(TypedDict):
     """Type definition for location information returned by the API"""
+
     latitude: float
     longitude: float
     city: str
@@ -21,12 +23,12 @@ def get_location() -> LocationInfo:
     """
     response = requests.get("https://ipapi.co/json/")
     data = response.json()
-    
+
     return {
         "latitude": data["latitude"],
         "longitude": data["longitude"],
         "city": data["city"],
         "region": data["region"],
         "country": data["country_name"],
-        "timezone": data["timezone"]
+        "timezone": data["timezone"],
     }
