@@ -80,6 +80,12 @@ def search_flickr_photos(text: str, latitude: float, longitude: float, radius: i
             raise ValueError(f"Flickr API error: {error_msg}")
 
         return data["photos"]["photo"]
+    except requests.RequestException as e:
+        logger.error(f"Failed to fetch photos from Flickr: {str(e)}")
+        raise RuntimeError(f"Failed to fetch photos from Flickr: {str(e)}") from e
+    except (KeyError, TypeError) as e:
+        logger.error(f"Invalid photo data received from Flickr: {str(e)}")
+        raise ValueError(f"Invalid photo data received from Flickr: {str(e)}") from e
 
 
 @tool
