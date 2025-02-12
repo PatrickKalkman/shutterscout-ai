@@ -34,8 +34,6 @@ line-length = 120
 "__init__.py" = ["F401"]
 
 [tool.pytest.ini_options]
-asyncio_mode = "strict"
-asyncio_default_fixture_loop_scope = "function"
 
 [dependency-groups]
 dev = [
