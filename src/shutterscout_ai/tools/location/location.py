@@ -1,6 +1,7 @@
 from typing import TypedDict
 
 import requests
+from loguru import logger
 from smolagents import tool
 
 
@@ -21,14 +22,26 @@ def get_location() -> LocationInfo:
     Retrieves the user's location information based on their IP address using ipapi.co.
     Returns a dictionary containing latitude, longitude, city, region, country and timezone.
     """
-    response = requests.get("https://ipapi.co/json/")
-    data = response.json()
+    try:
+        response = requests.get("https://ipapi.co/json/")
+        response.raise_for_status()
+        data = response.json()
 
-    return {
-        "latitude": data["latitude"],
-        "longitude": data["longitude"],
-        "city": data["city"],
-        "region": data["region"],
-        "country": data["country_name"],
-        "timezone": data["timezone"],
-    }
+        if "error" in data:
+            logger.error(f"API returned error: {data['error']}")
+            raise ValueError(f"Location API error: {data['error']}")
+
+        return {
+            "latitude": data["latitude"],
+            "longitude": data["longitude"],
+            "city": data["city"],
+            "region": data["region"],
+            "country": data["country_name"],
+            "timezone": data["timezone"],
+        }
+    except requests.RequestException as e:
+        logger.error(f"Failed to fetch location data: {str(e)}")
+        raise RuntimeError(f"Failed to fetch location data: {str(e)}") from e
+    except (KeyError, TypeError) as e:
+        logger.error(f"Invalid location data received: {str(e)}")
+        raise ValueError(f"Invalid location data received: {str(e)}") from e
