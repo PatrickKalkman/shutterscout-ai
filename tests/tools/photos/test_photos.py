@@ -1,5 +1,6 @@
 import os
 import pytest
+import requests
 from shutterscout_ai.tools.photos.photos import search_flickr_photos
 
 def test_search_flickr_photos_missing_api_key():
