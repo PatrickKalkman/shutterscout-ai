@@ -1010,6 +1010,7 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "loguru" },
+    { name = "python-dotenv" },
     { name = "requests" },
     { name = "smolagents" },
 ]
@@ -1024,6 +1025,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "loguru", specifier = ">=0.7.2" },
+    { name = "python-dotenv", specifier = ">=1.0.1" },
     { name = "requests", specifier = ">=2.32.3" },
     { name = "smolagents", specifier = ">=1.8.1" },
 ]

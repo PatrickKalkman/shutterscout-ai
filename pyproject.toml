@@ -20,7 +20,7 @@ build-backend = "hatchling.build"
 packages = ["src/shutterscout_ai"]
 
 [project.scripts]
-kubevox = "shutterscout_ai.cli:app"
+shutterscout = "shutterscout_ai.main:main"
 
 [tool.ruff]
 # Enable the pycodestyle (`E`) and Pyflakes (`F`) rules by default
