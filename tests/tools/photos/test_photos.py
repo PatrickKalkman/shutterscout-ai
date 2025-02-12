@@ -1,9 +1,8 @@
 import os
 
 import pytest
-import requests
 
-from shutterscout_ai.tools.photos.photos import search_flickr_photos, get_photo_urls, PhotoSize
+from shutterscout_ai.tools.photos.photos import PhotoSize, get_photo_urls, search_flickr_photos
 
 
 def test_search_flickr_photos_missing_api_key():
@@ -32,10 +31,10 @@ def test_get_photo_urls():
             "title": "Test Photo",
             "ispublic": 1,
             "isfriend": 0,
-            "isfamily": 0
+            "isfamily": 0,
         }
     ]
-    
+
     urls = get_photo_urls(sample_photos)
     assert len(urls) == 1
     assert urls[0]["id"] == "123"
@@ -54,10 +53,10 @@ def test_get_photo_urls_with_size():
             "title": "Test Photo",
             "ispublic": 1,
             "isfriend": 0,
-            "isfamily": 0
+            "isfamily": 0,
         }
     ]
-    
+
     urls = get_photo_urls(sample_photos, PhotoSize.LARGE_SQUARE)
     assert len(urls) == 1
     assert urls[0]["url"] == "https://farm66.staticflickr.com/789/123_abc_q.jpg"
