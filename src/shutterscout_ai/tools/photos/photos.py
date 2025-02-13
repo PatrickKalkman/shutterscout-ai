@@ -102,8 +102,17 @@ def get_photo_urls(photos: List[FlickrPhoto], size: Optional[PhotoSize] = None) 
         size_suffix = f"_{size.value}" if size and size.value else ""
 
         for photo in photos:
-            url = f"https://farm{photo['farm']}.staticflickr.com/{photo['server']}/{photo['id']}_{photo['secret']}{size_suffix}.jpg"
-            urls.append({"id": photo["id"], "title": photo["title"], "url": url})
+            url = (
+                f"https://farm{photo['farm']}.staticflickr.com/"
+                f"{photo['server']}/"
+                f"{photo['id']}_{photo['secret']}"
+                f"{size_suffix}.jpg"
+            )
+            urls.append({
+                "id": photo["id"],
+                "title": photo["title"],
+                "url": url
+            })
 
         return urls
     except (KeyError, TypeError) as e:
