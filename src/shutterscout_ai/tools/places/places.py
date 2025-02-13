@@ -29,12 +29,12 @@ def get_interesting_places(latitude: float, longitude: float, radius: int = 1000
     Returns:
         List of places with their details
     """
-    try:
-        api_key = os.getenv("FOURSQUARE_API_KEY")
-        if not api_key:
-            logger.error("FOURSQUARE_API_KEY environment variable not set")
-            raise ValueError("FOURSQUARE_API_KEY environment variable not set")
+    api_key = os.getenv("FOURSQUARE_API_KEY")
+    if not api_key:
+        logger.error("FOURSQUARE_API_KEY environment variable not set")
+        raise ValueError("FOURSQUARE_API_KEY environment variable not set")
 
+    try:
         # Categories: landmarks, cultural spots, museums, entertainment, scenic lookouts
         categories = "16032,16015,16019,13003,10027"
 
