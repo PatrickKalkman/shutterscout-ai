@@ -47,7 +47,7 @@ def get_interesting_places(latitude: float, longitude: float, radius: int = 1000
         data = response.json()
 
         return data.get("results", [])
-    except requests.RequestException as e:
+    except (requests.RequestException, Exception) as e:
         logger.error(f"Failed to fetch places from Foursquare: {str(e)}")
         raise RuntimeError(f"Failed to fetch places from Foursquare: {str(e)}") from e
     except (KeyError, TypeError) as e:
