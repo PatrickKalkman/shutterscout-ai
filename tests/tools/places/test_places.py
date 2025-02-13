@@ -1,6 +1,7 @@
 from unittest.mock import patch
 
 import pytest
+
 from shutterscout_ai.tools.places.places import get_interesting_places
 
 
@@ -27,9 +28,7 @@ def mock_response():
 
 def test_get_interesting_places_success(mock_response):
     """Test successful retrieval of places"""
-    with patch("requests.get") as mock_get, patch.dict(
-        "os.environ", {"FOURSQUARE_API_KEY": "test-key"}
-    ):
+    with patch("requests.get") as mock_get, patch.dict("os.environ", {"FOURSQUARE_API_KEY": "test-key"}):
         mock_get.return_value.json.return_value = mock_response
         mock_get.return_value.raise_for_status.return_value = None
 
@@ -58,9 +57,7 @@ def test_get_interesting_places_no_api_key():
 
 def test_get_interesting_places_api_error():
     """Test handling of API errors"""
-    with patch("requests.get") as mock_get, patch.dict(
-        "os.environ", {"FOURSQUARE_API_KEY": "test-key"}
-    ):
+    with patch("requests.get") as mock_get, patch.dict("os.environ", {"FOURSQUARE_API_KEY": "test-key"}):
         mock_get.side_effect = Exception("API Error")
 
         with pytest.raises(RuntimeError, match="Failed to fetch places from Foursquare"):
@@ -69,9 +66,7 @@ def test_get_interesting_places_api_error():
 
 def test_get_interesting_places_invalid_response():
     """Test handling of invalid API response"""
-    with patch("requests.get") as mock_get, patch.dict(
-        "os.environ", {"FOURSQUARE_API_KEY": "test-key"}
-    ):
+    with patch("requests.get") as mock_get, patch.dict("os.environ", {"FOURSQUARE_API_KEY": "test-key"}):
         mock_get.return_value.json.return_value = {"invalid": "response"}
         mock_get.return_value.raise_for_status.return_value = None
 
