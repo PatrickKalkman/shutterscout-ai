@@ -8,6 +8,7 @@ from smolagents import tool
 
 class Place(TypedDict):
     """Represents a place returned by Foursquare API"""
+
     fsq_id: str
     name: str
     categories: List[dict]
@@ -19,12 +20,12 @@ class Place(TypedDict):
 def get_interesting_places(latitude: float, longitude: float, radius: int = 10000) -> List[Place]:
     """
     Get interesting places around a location using Foursquare API.
-    
+
     Args:
         latitude: Location latitude
         longitude: Location longitude
         radius: Search radius in meters (default 10000)
-    
+
     Returns:
         List of places with their details
     """
@@ -36,17 +37,10 @@ def get_interesting_places(latitude: float, longitude: float, radius: int = 1000
 
         # Categories: landmarks, cultural spots, museums, entertainment, scenic lookouts
         categories = "16032,16015,16019,13003,10027"
-        
+
         url = "https://api.foursquare.com/v3/places/search"
-        headers = {
-            "Authorization": api_key,
-            "accept": "application/json"
-        }
-        params = {
-            "ll": f"{latitude},{longitude}",
-            "radius": radius,
-            "categories": categories
-        }
+        headers = {"Authorization": api_key, "accept": "application/json"}
+        params = {"ll": f"{latitude},{longitude}", "radius": radius, "categories": categories}
 
         response = requests.get(url, headers=headers, params=params)
         response.raise_for_status()
