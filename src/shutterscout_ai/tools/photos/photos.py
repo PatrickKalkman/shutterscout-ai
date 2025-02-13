@@ -108,11 +108,7 @@ def get_photo_urls(photos: List[FlickrPhoto], size: Optional[PhotoSize] = None) 
                 f"{photo['id']}_{photo['secret']}"
                 f"{size_suffix}.jpg"
             )
-            urls.append({
-                "id": photo["id"],
-                "title": photo["title"],
-                "url": url
-            })
+            urls.append({"id": photo["id"], "title": photo["title"], "url": url})
 
         return urls
     except (KeyError, TypeError) as e:
