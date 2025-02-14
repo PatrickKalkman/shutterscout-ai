@@ -1,6 +1,6 @@
 import os
 from enum import Enum
-from typing import List, Optional, TypedDict
+from typing import List, TypedDict
 
 import requests
 from loguru import logger
