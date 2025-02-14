@@ -1,5 +1,5 @@
 from loguru import logger
-from smolagents import CodeAgent, HfApiModel
+from smolagents import CodeAgent, HfApiModel, PromptTemplates
 
 from shutterscout_ai.tools.astronomy.astronomy import get_sunrise_sunset
 from shutterscout_ai.tools.location.location import get_location
@@ -7,7 +7,8 @@ from shutterscout_ai.tools.photos.photos import search_flickr_photos
 from shutterscout_ai.tools.places.places import get_interesting_places
 from shutterscout_ai.tools.weather.weather import get_weather_forecast
 
-SYSTEM_PROMPT = """You are ShutterScout AI, a photography location scout assistant. "
+PROMPT_TEMPLATES = PromptTemplates(
+    system_prompt="""You are ShutterScout AI, a photography location scout assistant. 
 Your goal is to help photographers find great locations to shoot and determine the best time to photograph them.
 
 Follow these steps to provide recommendations:
@@ -25,6 +26,7 @@ For each recommended location, provide:
 - Tips for shooting at this location
 
 Focus on providing practical, actionable information that helps photographers plan their shoots."""
+)
 
 
 def create_shutterscout_agent(model_id: str = "meta-llama/Llama-3.2-1B-Instruct") -> CodeAgent:
@@ -53,7 +55,7 @@ def create_shutterscout_agent(model_id: str = "meta-llama/Llama-3.2-1B-Instruct"
         agent = CodeAgent(
             tools=tools,
             model=model,
-            system_prompt=SYSTEM_PROMPT,
+            prompt_templates=PROMPT_TEMPLATES,
         )
 
         return agent
