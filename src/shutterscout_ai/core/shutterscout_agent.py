@@ -27,19 +27,19 @@ For each recommended location, provide:
 Focus on providing practical, actionable information that helps photographers plan their shoots."""
 
 
-def create_shutterscout_agent(model_id: str = None) -> CodeAgent:
+def create_shutterscout_agent(model_id: str = "meta-llama/Meta-Llama-3.1-8B-Instruct") -> CodeAgent:
     """
     Create and configure a ShutterScout AI agent with all available tools.
 
     Args:
-        model_id: Optional Hugging Face model ID. If not provided, will use the default model.
+        model_id: Hugging Face model ID. Defaults to Meta-Llama-3.1-8B-Instruct.
 
     Returns:
         Configured CodeAgent ready to provide photography location recommendations
     """
     try:
         # Initialize the model
-        model = HfApiModel(model_id=model_id) if model_id else HfApiModel()
+        model = HfApiModel(model_id=model_id)
 
         # Create agent with all available tools
         tools = [
