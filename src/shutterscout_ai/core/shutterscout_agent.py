@@ -129,7 +129,12 @@ def create_shutterscout_agent(
         raise RuntimeError(f"Failed to create ShutterScout agent: {str(e)}") from e
 
 
-def get_location_recommendations(custom_prompt: str = "", model_id: str = "meta-llama/Llama-3.3-70B-Instruct") -> str:
+def get_location_recommendations(
+    custom_prompt: str = "",
+    model_id: str = "meta-llama/Llama-3.3-70B-Instruct",
+    latitude: Optional[float] = None,
+    longitude: Optional[float] = None
+) -> str:
     """
     Generate photography location recommendations using the ShutterScout AI agent.
     Makes a single call to get_combined_data() to gather all necessary information.
@@ -137,6 +142,8 @@ def get_location_recommendations(custom_prompt: str = "", model_id: str = "meta-
     Args:
         custom_prompt: Optional custom instructions for analysis focus.
         model_id: Optional override for the model ID.
+        latitude: Optional latitude coordinate for location override.
+        longitude: Optional longitude coordinate for location override.
 
     Returns:
         str: Formatted recommendation text with practical photography guidance.

@@ -21,7 +21,10 @@ def main(
 
     try:
         logger.info("Getting photography location recommendations...")
-        recommendations = get_location_recommendations()
+        recommendations = get_location_recommendations(
+            latitude=latitude,
+            longitude=longitude
+        )
 
         with open("photography_location_recommendations.md", "w") as f:
             f.write(recommendations)
