@@ -55,7 +55,16 @@ def main() -> None:
     load_dotenv()
     logger.info("Environment variables loaded")
 
-    test_tools()
+    try:
+        from shutterscout_ai.core.shutterscout_agent import get_location_recommendations
+        
+        logger.info("Getting photography location recommendations...")
+        recommendations = get_location_recommendations()
+        logger.info("\nPhotography Location Recommendations:")
+        logger.info(recommendations)
+        
+    except Exception as e:
+        logger.error(f"Error getting recommendations: {str(e)}")
 
     logger.info("ShutterScout AI stopped")
 
