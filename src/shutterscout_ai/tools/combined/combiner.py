@@ -26,7 +26,7 @@ class CombinedData(TypedDict):
             - country (str): Country name
             - timezone (str): Timezone identifier
 
-        weather (List[DailyWeather]): 5-day weather forecast with daily data including:
+        weather (List[DailyWeather]): 2-day weather forecast with daily data including:
             - time (str): ISO format timestamp
             - temperature_min (float): Minimum temperature in Celsius
             - temperature_max (float): Maximum temperature in Celsius

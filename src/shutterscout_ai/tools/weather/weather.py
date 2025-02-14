@@ -24,7 +24,7 @@ class DailyWeather(TypedDict):
 @tool
 def get_weather_forecast(latitude: float, longitude: float) -> List[DailyWeather]:
     """
-    Retrieves a 5-day weather forecast for the specified location using Tomorrow.io API.
+    Retrieves a 2-day weather forecast for the specified location using Tomorrow.io API.
 
     Args:
         latitude: The latitude coordinate
