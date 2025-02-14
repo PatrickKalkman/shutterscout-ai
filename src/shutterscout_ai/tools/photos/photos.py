@@ -42,7 +42,7 @@ class PhotoUrl(TypedDict):
 
 
 @tool
-def search_flickr_photos(text: str, latitude: float, longitude: float, radius: int = 5) -> List[FlickrPhoto]:
+def search_flickr_photos(text: str, latitude: float, longitude: float, radius: int = 5) -> List[PhotoUrl]:
     """
     Search for photos on Flickr based on text query and location.
 
@@ -82,7 +82,8 @@ def search_flickr_photos(text: str, latitude: float, longitude: float, radius: i
             logger.error(f"Flickr API returned error: {error_msg}")
             raise ValueError(f"Flickr API error: {error_msg}")
 
-        return data["photos"]["photo"]
+        photos = data["photos"]["photo"]
+        return get_photo_urls(photos, PhotoSize.MEDIUM)
     except requests.RequestException as e:
         logger.error(f"Failed to fetch photos from Flickr: {str(e)}")
         raise RuntimeError(f"Failed to fetch photos from Flickr: {str(e)}") from e
@@ -91,8 +92,7 @@ def search_flickr_photos(text: str, latitude: float, longitude: float, radius: i
         raise ValueError(f"Invalid photo data received from Flickr: {str(e)}") from e
 
 
-@tool
-def get_photo_urls(photos: List[FlickrPhoto], size: Optional[PhotoSize] = None) -> List[PhotoUrl]:
+def get_photo_urls(photos: List[FlickrPhoto], size: PhotoSize = PhotoSize.MEDIUM) -> List[PhotoUrl]:
     """
     Convert Flickr photo data into actual photo URLs.
 
