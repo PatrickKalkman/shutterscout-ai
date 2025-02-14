@@ -7,19 +7,17 @@ from smolagents import tool
 
 
 class Place(TypedDict):
-    """Represents a place returned by Foursquare API"""
-
-    fsq_id: str
+    """Represents a simplified place with basic location information"""
+    
     name: str
-    categories: List[dict]
-    location: dict
-    distance: int
+    latitude: float
+    longitude: float
 
 
 @tool
 def get_interesting_places(latitude: float, longitude: float, radius: int = 10000) -> List[Place]:
     """
-    Get interesting places around a location using Foursquare API.
+    Get interesting places around a location using Foursquare API, returning simplified location data.
 
     Args:
         latitude: Location latitude
@@ -27,7 +25,7 @@ def get_interesting_places(latitude: float, longitude: float, radius: int = 1000
         radius: Search radius in meters (default 10000)
 
     Returns:
-        List of places with their details
+        List of places with name and coordinates
     """
     api_key = os.getenv("FOURSQUARE_API_KEY")
     if not api_key:
@@ -46,7 +44,19 @@ def get_interesting_places(latitude: float, longitude: float, radius: int = 1000
         response.raise_for_status()
         data = response.json()
 
-        return data.get("results", [])
+        results = []
+        for place in data.get("results", []):
+            try:
+                location = {
+                    'name': place['name'],
+                    'latitude': place['geocodes']['main']['latitude'],
+                    'longitude': place['geocodes']['main']['longitude']
+                }
+                results.append(location)
+            except (KeyError, TypeError) as e:
+                logger.warning(f"Skipping place due to missing data: {str(e)}")
+                continue
+        return results
     except (requests.RequestException, Exception) as e:
         logger.error(f"Failed to fetch places from Foursquare: {str(e)}")
         raise RuntimeError(f"Failed to fetch places from Foursquare: {str(e)}") from e
