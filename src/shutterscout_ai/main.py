@@ -33,10 +33,14 @@ def test_tools() -> None:
 
         # 5. Search for photos near interesting places
         logger.info("\nSearching for photos...")
-        for place in places[:2]:  # Limit to first 3 places to avoid too many API calls
+        for place in places[:2]:  # Limit to first 2 places to avoid too many API calls
             logger.info(f"\nSearching photos for: {place['name']}")
-            logger.info(f"Location: {place['location']}")
-            photos = search_flickr_photos(place["name"], place["location"]["latitude"], place["location"]["longitude"])
+            # Use the original location coordinates since place location doesn't include lat/long
+            photos = search_flickr_photos(
+                place["name"],
+                latitude=location["latitude"],
+                longitude=location["longitude"]
+            )
             logger.info(f"Found {len(photos)} photos for {place['name']}")
 
     except Exception as e:
