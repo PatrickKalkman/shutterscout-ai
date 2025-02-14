@@ -1,3 +1,5 @@
+from typing import Optional
+
 from loguru import logger
 from smolagents import CodeAgent, HfApiModel
 
