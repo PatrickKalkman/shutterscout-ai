@@ -68,6 +68,9 @@ def search_flickr_photos(text: str, latitude: float, longitude: float, radius: i
             "radius": radius,
             "format": "json",
             "nojsoncallback": 1,
+            "sort": "relevance",  # Sort by relevance
+            "per_page": 5,  # Limit to 5 photos
+            "extras": "views,date_taken",  # Get additional metadata
         }
 
         response = requests.get(url, params=params)
