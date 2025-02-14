@@ -1,5 +1,3 @@
-from typing import List
-
 from loguru import logger
 from smolagents import CodeAgent, HfApiModel
 
@@ -9,7 +7,8 @@ from shutterscout_ai.tools.photos.photos import search_flickr_photos
 from shutterscout_ai.tools.places.places import get_interesting_places
 from shutterscout_ai.tools.weather.weather import get_weather_forecast
 
-SYSTEM_PROMPT = """You are ShutterScout AI, a photography location scout assistant. Your goal is to help photographers find great locations to shoot and determine the best time to photograph them.
+SYSTEM_PROMPT = """You are ShutterScout AI, a photography location scout assistant. "
+Your goal is to help photographers find great locations to shoot and determine the best time to photograph them.
 
 Follow these steps to provide recommendations:
 1. Get the user's location
@@ -67,17 +66,18 @@ def create_shutterscout_agent(model_id: str = None) -> CodeAgent:
 def get_location_recommendations() -> str:
     """
     Get photography location recommendations using the ShutterScout AI agent.
-    
+
     Returns:
         A formatted string containing location recommendations with weather and timing details.
     """
     try:
         agent = create_shutterscout_agent()
-        
-        prompt = """Analyze the current location and provide detailed recommendations for 2 interesting places to photograph. 
-        Include weather conditions, best time to shoot based on sunrise/sunset, and example photos. 
+
+        prompt = """Analyze the current location and provide detailed recommendations
+        for 2 interesting places to photograph.
+        Include weather conditions, best time to shoot based on sunrise/sunset, and example photos.
         Format the response in a clear, easy-to-read way."""
-        
+
         result = agent.run(prompt)
         return result
 
