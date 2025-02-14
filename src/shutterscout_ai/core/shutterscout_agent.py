@@ -157,17 +157,17 @@ def get_location_recommendations(
         if custom_prompt:
             prompt += f"\n\nAdditional Focus:\n{custom_prompt}"
 
-        # Create context with location if provided
-        context = {}
+        # Create additional args if custom location is provided
+        additional_args = None
         if latitude is not None and longitude is not None:
-            context = {
+            additional_args = {
                 "custom_location": {
                     "latitude": latitude,
                     "longitude": longitude
                 }
             }
             
-        result = agent.run(prompt, context=context)
+        result = agent.run(prompt, additional_args=additional_args)
 
         logger.info("Successfully generated location recommendations")
         return result
