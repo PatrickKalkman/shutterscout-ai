@@ -41,7 +41,9 @@ def test_tools() -> None:
                 latitude=location["latitude"],
                 longitude=location["longitude"]
             )
-            logger.info(f"Found {len(photos)} photos for {place['name']}")
+            logger.info(f"Found {len(photos)} photos for {place['name']}:")
+            for photo in photos:
+                logger.info(f"- {photo['title']}: {photo['url']}")
 
     except Exception as e:
         logger.error(f"Error during tool testing: {str(e)}")
