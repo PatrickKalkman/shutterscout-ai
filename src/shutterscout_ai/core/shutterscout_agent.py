@@ -1,63 +1,127 @@
 from loguru import logger
-from smolagents import CodeAgent, HfApiModel, PromptTemplates
+from smolagents import CodeAgent, HfApiModel
 
-from shutterscout_ai.tools.astronomy.astronomy import get_sunrise_sunset
-from shutterscout_ai.tools.location.location import get_location
-from shutterscout_ai.tools.photos.photos import search_flickr_photos
-from shutterscout_ai.tools.places.places import get_interesting_places
-from shutterscout_ai.tools.weather.weather import get_weather_forecast
+from shutterscout_ai.tools.combined.combiner import get_combined_data
 
-PROMPT_TEMPLATES = PromptTemplates(
-    system_prompt="""You are ShutterScout AI, a photography location scout assistant. 
-Your goal is to help photographers find great locations to shoot and determine the best time to photograph them.
+INSTRUCTION_PROMPT = """You are ShutterScout AI, a photography location scout assistant. Make one call to
+ get_combined_data() and analyze the results for photographers.
 
-Follow these steps to provide recommendations:
-1. Get the user's location
-2. Find interesting places nearby
-3. Get weather forecasts for the area
-4. Get sunrise/sunset times
-5. Search for example photos of the locations
+Analyze:
+- Weather impact on photography (light, visibility, conditions)
+- Best shooting times based on sun position and weather
+- Location potential and current conditions
+- Available sample photos
 
-For each recommended location, provide:
-- A brief description of the place
-- Best time to photograph (based on sunrise/sunset and weather)
-- Weather conditions to expect
-- Example photos from other photographers
-- Tips for shooting at this location
+Format your response in markdown:
 
-Focus on providing practical, actionable information that helps photographers plan their shoots."""
-)
+# 📍 ShutterScout.AI Location Overview
+[Location and current conditions for photography]
+
+## 🌤️ Photography Conditions
+[Key weather factors affecting shoots]
+- Temperature range
+- Cloud cover impact
+- Visibility conditions
+- Wind considerations
+
+## ⏰ Best Shooting Times
+[Optimal times with reasoning]
+- Sunrise/sunset timings
+- Golden hour periods
+- Weather-based recommendations
+
+## 📸 Location Recommendations
+[Top 5 locations with detailed photography tips]
+
+### Location 1: [Name]
+- **Best subjects/angles**: [Details]
+- **Ideal timing**: [Time recommendations]
+- **Technical tips**: [Camera settings, lens choices]
+- **Unique features**: [Special photographic opportunities]
+
+### Location 2: [Name]
+- **Best subjects/angles**: [Details]
+- **Ideal timing**: [Time recommendations]
+- **Technical tips**: [Camera settings, lens choices]
+- **Unique features**: [Special photographic opportunities]
+
+### Location 3: [Name]
+- **Best subjects/angles**: [Details]
+- **Ideal timing**: [Time recommendations]
+- **Technical tips**: [Camera settings, lens choices]
+- **Unique features**: [Special photographic opportunities]
+
+### Location 4: [Name]
+- **Best subjects/angles**: [Details]
+- **Ideal timing**: [Time recommendations]
+- **Technical tips**: [Camera settings, lens choices]
+- **Unique features**: [Special photographic opportunities]
+
+### Location 5: [Name]
+- **Best subjects/angles**: [Details]
+- **Ideal timing**: [Time recommendations]
+- **Technical tips**: [Camera settings, lens choices]
+- **Unique features**: [Special photographic opportunities]
+
+## 🎯 Sample Photos & Shot Ideas
+
+### Available Photos
+```markdown
+[List of actual photos from photos_by_place with titles and URLs as markdown links]
+- [Photo Title](URL)
+```
+
+### Recommended Shots
+[For each location, at least one specific shot recommendation]
+1. Location 1: [Specific shot idea with technical details]
+2. Location 2: [Specific shot idea with technical details]
+3. Location 3: [Specific shot idea with technical details]
+4. Location 4: [Specific shot idea with technical details]
+5. Location 5: [Specific shot idea with technical details]
+
+## ⚠️ Photographer's Notes
+
+### Equipment Needed
+- [Comprehensive list of recommended equipment]
+- [Specific gear for each location if needed]
+
+### Access Information
+- [Location access details for all 5 spots]
+- [Opening hours and restrictions]
+- [Parking information]
+
+### Safety Considerations
+- [Weather-related precautions]
+- [Location-specific safety notes]
+- [Equipment protection tips]"""
 
 
-def create_shutterscout_agent(model_id: str = "meta-llama/Llama-3.2-1B-Instruct") -> CodeAgent:
+def create_shutterscout_agent(
+    model_id: str = "meta-llama/Llama-3.3-70B-Instruct", temperature: float = 0.7, max_tokens: int = 2048
+) -> CodeAgent:
     """
-    Create and configure a ShutterScout AI agent with all available tools.
+    Create and configure a ShutterScout AI agent with photography location scouting capabilities.
 
     Args:
-        model_id: Hugging Face model ID. Defaults to Meta-Llama-3.1-8B-Instruct.
+        model_id: Hugging Face model identifier for the language model.
+        temperature: Sampling temperature for model outputs (0.0-1.0).
+        max_tokens: Maximum number of tokens in the model response.
 
     Returns:
-        Configured CodeAgent ready to provide photography location recommendations
+        CodeAgent: Configured agent ready to provide photography location recommendations.
     """
     try:
-        # Initialize the model
-        model = HfApiModel(model_id=model_id)
+        # Validate parameters
+        if not (0.0 <= temperature <= 1.0):
+            raise ValueError(f"Temperature must be between 0.0 and 1.0, got {temperature}")
+        if max_tokens < 1:
+            raise ValueError(f"max_tokens must be positive, got {max_tokens}")
 
-        # Create agent with all available tools
-        tools = [
-            get_location,
-            get_weather_forecast,
-            get_sunrise_sunset,
-            get_interesting_places,
-            search_flickr_photos,
-        ]
+        model = HfApiModel(model_id=model_id, temperature=temperature, max_tokens=max_tokens)
 
-        agent = CodeAgent(
-            tools=tools,
-            model=model,
-            prompt_templates=PROMPT_TEMPLATES,
-        )
+        agent = CodeAgent(tools=[get_combined_data], model=model, additional_authorized_imports=["json"])
 
+        logger.info(f"Successfully created ShutterScout agent with model {model_id}")
         return agent
 
     except Exception as e:
@@ -65,22 +129,28 @@ def create_shutterscout_agent(model_id: str = "meta-llama/Llama-3.2-1B-Instruct"
         raise RuntimeError(f"Failed to create ShutterScout agent: {str(e)}") from e
 
 
-def get_location_recommendations() -> str:
+def get_location_recommendations(custom_prompt: str = "", model_id: str = "meta-llama/Llama-3.3-70B-Instruct") -> str:
     """
-    Get photography location recommendations using the ShutterScout AI agent.
+    Generate photography location recommendations using the ShutterScout AI agent.
+    Makes a single call to get_combined_data() to gather all necessary information.
+
+    Args:
+        custom_prompt: Optional custom instructions for analysis focus.
+        model_id: Optional override for the model ID.
 
     Returns:
-        A formatted string containing location recommendations with weather and timing details.
+        str: Formatted recommendation text with practical photography guidance.
     """
     try:
-        agent = create_shutterscout_agent()
+        agent = create_shutterscout_agent(model_id=model_id)
 
-        prompt = """Analyze the current location and provide detailed recommendations
-        for 2 interesting places to photograph.
-        Include weather conditions, best time to shoot based on sunrise/sunset, and example photos.
-        Format the response in a clear, easy-to-read way."""
+        prompt = INSTRUCTION_PROMPT
+        if custom_prompt:
+            prompt += f"\n\nAdditional Focus:\n{custom_prompt}"
 
         result = agent.run(prompt)
+
+        logger.info("Successfully generated location recommendations")
         return result
 
     except Exception as e:

@@ -8,7 +8,7 @@ from smolagents import tool
 
 class Place(TypedDict):
     """Represents a simplified place with basic location information"""
-    
+
     name: str
     latitude: float
     longitude: float
@@ -48,9 +48,9 @@ def get_interesting_places(latitude: float, longitude: float, radius: int = 1000
         for place in data.get("results", []):
             try:
                 location = {
-                    'name': place['name'],
-                    'latitude': place['geocodes']['main']['latitude'],
-                    'longitude': place['geocodes']['main']['longitude']
+                    "name": place["name"],
+                    "latitude": place["geocodes"]["main"]["latitude"],
+                    "longitude": place["geocodes"]["main"]["longitude"],
                 }
                 results.append(location)
             except (KeyError, TypeError) as e:

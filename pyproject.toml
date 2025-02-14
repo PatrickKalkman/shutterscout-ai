@@ -6,9 +6,10 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "requests>=2.32.3",
-    "smolagents>=1.8.1",
+    "smolagents>=1.9.1",
     "loguru>=0.7.2",
     "python-dotenv>=1.0.1",
+    "litellm>=1.61.3",
 ]
 
 
