@@ -35,8 +35,11 @@ def test_tools() -> None:
         logger.info("\nSearching for photos...")
         for place in places[:2]:  # Limit to first 2 places to avoid too many API calls
             logger.info(f"\nSearching photos for: {place['name']}")
-            # Use the original location coordinates since place location doesn't include lat/long
-            photos = search_flickr_photos(place["name"], latitude=location["latitude"], longitude=location["longitude"])
+            photos = search_flickr_photos(
+                place["name"],
+                latitude=place["latitude"],
+                longitude=place["longitude"]
+            )
             logger.info(f"Found {len(photos)} photos for {place['name']}:")
             for photo in photos:
                 logger.info(f"- {photo['title']}: {photo['url']}")
