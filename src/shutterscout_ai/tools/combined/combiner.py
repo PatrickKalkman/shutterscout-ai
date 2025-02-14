@@ -106,6 +106,7 @@ def get_combined_data(
     Args:
         max_places: Maximum number of interesting places to fetch (default: 5)
         photo_radius_km: Radius in kilometers to search for photos around each place (default: 5)
+        custom_location: Optional dictionary with latitude and longitude for location override
 
     Returns:
         CombinedData: A TypedDict containing all aggregated information:
