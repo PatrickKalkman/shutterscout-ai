@@ -36,11 +36,7 @@ def test_tools() -> None:
         for place in places[:2]:  # Limit to first 2 places to avoid too many API calls
             logger.info(f"\nSearching photos for: {place['name']}")
             # Use the original location coordinates since place location doesn't include lat/long
-            photos = search_flickr_photos(
-                place["name"],
-                latitude=location["latitude"],
-                longitude=location["longitude"]
-            )
+            photos = search_flickr_photos(place["name"], latitude=location["latitude"], longitude=location["longitude"])
             logger.info(f"Found {len(photos)} photos for {place['name']}:")
             for photo in photos:
                 logger.info(f"- {photo['title']}: {photo['url']}")
@@ -56,13 +52,14 @@ def main() -> None:
     logger.info("Environment variables loaded")
 
     try:
-        from shutterscout_ai.core.shutterscout_agent import get_location_recommendations
-        
-        logger.info("Getting photography location recommendations...")
-        recommendations = get_location_recommendations()
-        logger.info("\nPhotography Location Recommendations:")
-        logger.info(recommendations)
-        
+        # from shutterscout_ai.core.shutterscout_agent import get_location_recommendations
+
+        # logger.info("Getting photography location recommendations...")
+        # recommendations = get_location_recommendations()
+        # logger.info("\nPhotography Location Recommendations:")
+        # logger.info(recommendations)
+        test_tools()
+
     except Exception as e:
         logger.error(f"Error getting recommendations: {str(e)}")
 
