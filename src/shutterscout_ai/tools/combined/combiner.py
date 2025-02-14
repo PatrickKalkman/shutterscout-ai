@@ -90,7 +90,11 @@ def fetch_with_retry(func, *args, max_retries: int = 3, delay: float = 1.0) -> O
 
 
 @tool
-def get_combined_data(max_places: int = 5, photo_radius_km: int = 5) -> CombinedData:
+def get_combined_data(
+    max_places: int = 5, 
+    photo_radius_km: int = 5,
+    custom_location: Optional[dict] = None
+) -> CombinedData:
     """
     Combines data from all ShutterScout AI tools into a single comprehensive response.
     Uses concurrent execution where possible to improve performance.
@@ -130,7 +134,15 @@ def get_combined_data(max_places: int = 5, photo_radius_km: int = 5) -> Combined
         - All timestamps are in UTC unless otherwise specified
     """
     # Get location data first as it's required for other calls
-    location = fetch_with_retry(get_location)
+    if custom_location:
+        # Create a full LocationInfo from the custom coordinates
+        location = fetch_with_retry(get_location)  # Get default location first
+        if location:
+            # Override with custom coordinates
+            location["latitude"] = custom_location["latitude"]
+            location["longitude"] = custom_location["longitude"]
+    else:
+        location = fetch_with_retry(get_location)
     if not location:
         raise RuntimeError("Failed to fetch critical location data")
 
