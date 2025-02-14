@@ -10,17 +10,13 @@ def mock_response():
     return {
         "results": [
             {
-                "fsq_id": "abc123",
                 "name": "Test Museum",
-                "categories": [{"id": 16019, "name": "Museum"}],
-                "location": {
-                    "address": "123 Test St",
-                    "country": "US",
-                    "formatted_address": "123 Test St, City, Country",
-                    "locality": "City",
-                    "postcode": "12345",
-                },
-                "distance": 500,
+                "geocodes": {
+                    "main": {
+                        "latitude": 51.9187,
+                        "longitude": 4.364
+                    }
+                }
             }
         ]
     }
@@ -36,8 +32,8 @@ def test_get_interesting_places_success(mock_response):
 
         assert len(places) == 1
         assert places[0]["name"] == "Test Museum"
-        assert places[0]["fsq_id"] == "abc123"
-        assert places[0]["distance"] == 500
+        assert places[0]["latitude"] == 51.9187
+        assert places[0]["longitude"] == 4.364
 
         # Verify API call parameters
         mock_get.assert_called_once()
