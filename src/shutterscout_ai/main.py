@@ -1,11 +1,11 @@
 from dotenv import load_dotenv
 from loguru import logger
 
-from shutterscout_ai.tools.location.location import get_location
-from shutterscout_ai.tools.weather.weather import get_weather_forecast
 from shutterscout_ai.tools.astronomy.astronomy import get_sunrise_sunset
-from shutterscout_ai.tools.places.places import get_interesting_places
+from shutterscout_ai.tools.location.location import get_location
 from shutterscout_ai.tools.photos.photos import search_flickr_photos
+from shutterscout_ai.tools.places.places import get_interesting_places
+from shutterscout_ai.tools.weather.weather import get_weather_forecast
 
 
 def test_tools() -> None:
@@ -30,16 +30,13 @@ def test_tools() -> None:
         logger.info("\nGetting interesting places...")
         places = get_interesting_places(location["latitude"], location["longitude"])
         logger.info(f"Found {len(places)} interesting places")
-        
+
         # 5. Search for photos near interesting places
         logger.info("\nSearching for photos...")
-        for place in places[:3]:  # Limit to first 3 places to avoid too many API calls
+        for place in places[:2]:  # Limit to first 3 places to avoid too many API calls
             logger.info(f"\nSearching photos for: {place['name']}")
-            photos = search_flickr_photos(
-                place["name"],
-                place["location"]["latitude"],
-                place["location"]["longitude"]
-            )
+            logger.info(f"Location: {place['location']}")
+            photos = search_flickr_photos(place["name"], place["location"]["latitude"], place["location"]["longitude"])
             logger.info(f"Found {len(photos)} photos for {place['name']}")
 
     except Exception as e:
@@ -51,9 +48,9 @@ def main() -> None:
     logger.info("Starting ShutterScout AI...")
     load_dotenv()
     logger.info("Environment variables loaded")
-    
+
     test_tools()
-    
+
     logger.info("ShutterScout AI stopped")
 
 
