@@ -27,7 +27,7 @@ For each recommended location, provide:
 Focus on providing practical, actionable information that helps photographers plan their shoots."""
 
 
-def create_shutterscout_agent(model_id: str = "meta-llama/Meta-Llama-3.1-8B-Instruct") -> CodeAgent:
+def create_shutterscout_agent(model_id: str = "meta-llama/Llama-3.2-1B-Instruct") -> CodeAgent:
     """
     Create and configure a ShutterScout AI agent with all available tools.
 
