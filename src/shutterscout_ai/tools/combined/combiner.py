@@ -63,31 +63,6 @@ class CombinedData(TypedDict):
     photos_by_place: dict[str, List[PhotoUrl]]
 
 
-def fetch_with_retry(func, *args, max_retries: int = 3, delay: float = 1.0) -> Optional[any]:
-    """
-    Helper function to retry API calls with exponential backoff.
-
-    Args:
-        func: Function to execute
-        *args: Arguments to pass to the function
-        max_retries: Maximum number of retry attempts (default: 3)
-        delay: Initial delay between retries in seconds (default: 1.0)
-
-    Returns:
-        The function result if successful, None if all retries failed
-    """
-    for attempt in range(max_retries):
-        try:
-            return func(*args)
-        except Exception as e:
-            if attempt == max_retries - 1:
-                logger.error(f"All retry attempts failed for {func.__name__}: {str(e)}")
-                return None
-            wait_time = delay * (2**attempt)
-            logger.warning(f"Attempt {attempt + 1} failed for {func.__name__}, retrying in {wait_time}s: {str(e)}")
-            sleep(wait_time)
-    return None
-
 
 @tool
 def get_combined_data(max_places: int = 5, photo_radius_km: int = 5) -> CombinedData:
@@ -130,19 +105,19 @@ def get_combined_data(max_places: int = 5, photo_radius_km: int = 5) -> Combined
         - All timestamps are in UTC unless otherwise specified
     """
     # Get location data first as it's required for other calls
-    location = fetch_with_retry(get_location)
+    location = get_location()
 
     # Prepare concurrent execution of weather and sun time fetching
     with ThreadPoolExecutor(max_workers=3) as executor:
         futures = {
             "weather": executor.submit(
-                fetch_with_retry, get_weather_forecast, location["latitude"], location["longitude"]
+                get_weather_forecast, location["latitude"], location["longitude"]
             ),
             "sun_times": executor.submit(
-                fetch_with_retry, get_sunrise_sunset, location["latitude"], location["longitude"]
+                get_sunrise_sunset, location["latitude"], location["longitude"]
             ),
             "places": executor.submit(
-                fetch_with_retry, get_interesting_places, location["latitude"], location["longitude"]
+                get_interesting_places, location["latitude"], location["longitude"]
             ),
         }
 
@@ -165,7 +140,6 @@ def get_combined_data(max_places: int = 5, photo_radius_km: int = 5) -> Combined
     with ThreadPoolExecutor(max_workers=len(places)) as executor:
         photo_futures = {
             place["name"]: executor.submit(
-                fetch_with_retry,
                 search_flickr_photos,
                 place["name"],
                 place["latitude"],
