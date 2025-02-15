@@ -1,7 +1,6 @@
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict
-from time import sleep
-from typing import List, Optional, TypedDict
+from typing import List, TypedDict
 
 from loguru import logger
 from smolagents import tool
@@ -63,7 +62,6 @@ class CombinedData(TypedDict):
     photos_by_place: dict[str, List[PhotoUrl]]
 
 
-
 @tool
 def get_combined_data(max_places: int = 5, photo_radius_km: int = 5) -> CombinedData:
     """
@@ -110,15 +108,9 @@ def get_combined_data(max_places: int = 5, photo_radius_km: int = 5) -> Combined
     # Prepare concurrent execution of weather and sun time fetching
     with ThreadPoolExecutor(max_workers=3) as executor:
         futures = {
-            "weather": executor.submit(
-                get_weather_forecast, location["latitude"], location["longitude"]
-            ),
-            "sun_times": executor.submit(
-                get_sunrise_sunset, location["latitude"], location["longitude"]
-            ),
-            "places": executor.submit(
-                get_interesting_places, location["latitude"], location["longitude"]
-            ),
+            "weather": executor.submit(get_weather_forecast, location["latitude"], location["longitude"]),
+            "sun_times": executor.submit(get_sunrise_sunset, location["latitude"], location["longitude"]),
+            "places": executor.submit(get_interesting_places, location["latitude"], location["longitude"]),
         }
 
         # Wait for all futures to complete

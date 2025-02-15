@@ -10,6 +10,7 @@ dependencies = [
     "loguru>=0.7.2",
     "python-dotenv>=1.0.1",
     "litellm>=1.61.3",
+    "typer>=0.15.1",
 ]
 
 

@@ -1,5 +1,3 @@
-from typing import Optional
-
 from loguru import logger
 from smolagents import CodeAgent, HfApiModel
 
@@ -33,7 +31,7 @@ Format your response in markdown:
 - Weather-based recommendations
 
 ## 📸 Location Recommendations
-[Top 5 locations with detailed photography tips]
+[Top 3 locations with detailed photography tips]
 
 ### Location 1: [Name]
 - **Best subjects/angles**: [Details]
@@ -53,18 +51,6 @@ Format your response in markdown:
 - **Technical tips**: [Camera settings, lens choices]
 - **Unique features**: [Special photographic opportunities]
 
-### Location 4: [Name]
-- **Best subjects/angles**: [Details]
-- **Ideal timing**: [Time recommendations]
-- **Technical tips**: [Camera settings, lens choices]
-- **Unique features**: [Special photographic opportunities]
-
-### Location 5: [Name]
-- **Best subjects/angles**: [Details]
-- **Ideal timing**: [Time recommendations]
-- **Technical tips**: [Camera settings, lens choices]
-- **Unique features**: [Special photographic opportunities]
-
 ## 🎯 Sample Photos & Shot Ideas
 
 ### Available Photos
@@ -78,8 +64,6 @@ Format your response in markdown:
 1. Location 1: [Specific shot idea with technical details]
 2. Location 2: [Specific shot idea with technical details]
 3. Location 3: [Specific shot idea with technical details]
-4. Location 4: [Specific shot idea with technical details]
-5. Location 5: [Specific shot idea with technical details]
 
 ## ⚠️ Photographer's Notes
 
@@ -131,12 +115,7 @@ def create_shutterscout_agent(
         raise RuntimeError(f"Failed to create ShutterScout agent: {str(e)}") from e
 
 
-def get_location_recommendations(
-    custom_prompt: str = "",
-    model_id: str = "meta-llama/Llama-3.3-70B-Instruct",
-    latitude: Optional[float] = None,
-    longitude: Optional[float] = None
-) -> str:
+def get_location_recommendations(custom_prompt: str = "", model_id: str = "meta-llama/Llama-3.3-70B-Instruct") -> str:
     """
     Generate photography location recommendations using the ShutterScout AI agent.
     Makes a single call to get_combined_data() to gather all necessary information.
@@ -157,17 +136,7 @@ def get_location_recommendations(
         if custom_prompt:
             prompt += f"\n\nAdditional Focus:\n{custom_prompt}"
 
-        # Create additional args if custom location is provided
-        additional_args = None
-        if latitude is not None and longitude is not None:
-            additional_args = {
-                "custom_location": {
-                    "latitude": latitude,
-                    "longitude": longitude
-                }
-            }
-            
-        result = agent.run(prompt, additional_args=additional_args)
+        result = agent.run(prompt)
 
         logger.info("Successfully generated location recommendations")
         return result
