@@ -25,15 +25,15 @@ def get_location(debug: bool = False) -> LocationInfo:
     Args:
         debug: If True, returns hardcoded coordinates for Rotterdam for debugging purposes
     """
-    # if debug:
-    return {
-        "latitude": 51.9181,
-        "longitude": 4.4739,
-        "city": "Rotterdam",
-        "region": "South Holland",
-        "country": "Netherlands",
-        "timezone": "Europe/Amsterdam",
-    }
+    if debug:
+        return {
+            "latitude": 51.9181,
+            "longitude": 4.4739,
+            "city": "Rotterdam",
+            "region": "South Holland",
+            "country": "Netherlands",
+            "timezone": "Europe/Amsterdam",
+        }
     try:
         headers = {
             "User-Agent": (
