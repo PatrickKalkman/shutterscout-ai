@@ -31,18 +31,13 @@ def get_sunrise_sunset(latitude: float, longitude: float) -> SunTimes:
         response.raise_for_status()
 
         data = response.json()
-        
         if data.get("status") != "OK":
             logger.error(f"API returned error status: {data.get('status')}")
             raise ValueError(f"Sunrise-sunset API error: {data.get('status')}")
 
         results = data.get("results", {})
-        
-        return SunTimes(
-            sunrise=results["sunrise"],
-            sunset=results["sunset"],
-            day_length=results["day_length"]
-        )
+
+        return SunTimes(sunrise=results["sunrise"], sunset=results["sunset"], day_length=results["day_length"])
     except requests.RequestException as e:
         logger.error(f"Failed to fetch sun times data: {str(e)}")
         raise RuntimeError(f"Failed to fetch sun times data: {str(e)}") from e

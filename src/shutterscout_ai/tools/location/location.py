@@ -21,19 +21,19 @@ def get_location(debug: bool = False) -> LocationInfo:
     """
     Retrieves the user's location information based on their IP address using ipapi.co.
     Returns a dictionary containing latitude, longitude, city, region, country and timezone.
-    
+
     Args:
         debug: If True, returns hardcoded coordinates for Rotterdam for debugging purposes
     """
-    if debug:
-        return {
-            "latitude": 51.9181,
-            "longitude": 4.4739,
-            "city": "Rotterdam",
-            "region": "South Holland",
-            "country": "Netherlands",
-            "timezone": "Europe/Amsterdam",
-        }
+    # if debug:
+    return {
+        "latitude": 51.9181,
+        "longitude": 4.4739,
+        "city": "Rotterdam",
+        "region": "South Holland",
+        "country": "Netherlands",
+        "timezone": "Europe/Amsterdam",
+    }
     try:
         headers = {
             "User-Agent": (

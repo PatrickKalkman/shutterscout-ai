@@ -59,12 +59,6 @@ Format your response in markdown:
 - [Photo Title](URL)
 ```
 
-### Recommended Shots
-[For each location, at least one specific shot recommendation]
-1. Location 1: [Specific shot idea with technical details]
-2. Location 2: [Specific shot idea with technical details]
-3. Location 3: [Specific shot idea with technical details]
-
 ## ⚠️ Photographer's Notes
 
 ### Equipment Needed
@@ -72,7 +66,7 @@ Format your response in markdown:
 - [Specific gear for each location if needed]
 
 ### Access Information
-- [Location access details for all 5 spots]
+- [Location access details for all 3 spots]
 - [Opening hours and restrictions]
 - [Parking information]
 

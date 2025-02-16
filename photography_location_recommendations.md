@@ -1,64 +1,53 @@
 # 📍 ShutterScout.AI Location Overview
-The location is Heesch, North Brabant, The Netherlands.
+[Rotterdam, Netherlands]
 
 ## 🌤️ Photography Conditions
-- Temperature range: -4.4 - 13.6°C
-- Cloud cover impact: High
-- Visibility conditions: Good
-- Wind considerations: High
+- Temperature range: -2.8 - 3.7°C
+- Cloud cover impact: 30%
+- Visibility conditions: 16 km
+- Wind considerations: 3.5 m/s
 
 ## ⏰ Best Shooting Times
-- Sunrise: 2025-02-15T06:49:00Z
-- Sunset: 2025-02-15T16:54:00Z
-- Golden hour periods: 2025-02-15T06:49:00Z, 2025-02-15T16:54:00Z
+- Sunrise/sunset timings: 6:52:19 AM / 4:59:55 PM
+- Golden hour periods: 1 hour after sunrise and 1 hour before sunset
+- Weather-based recommendations: Avoid shooting during peak sun hours and heavy precipitation
 
 ## 📸 Location Recommendations
-### Location 1: Hullie Speelboerderij
-- **Best subjects/angles**: Landscapes, cityscapes
-- **Ideal timing**: Golden hour
-- **Technical tips**: Use a wide-angle lens, adjust exposure compensation
-- **Unique features**: Unique architectural features, street art
+### Location 1: Kino
+- **Best subjects/angles**: Kino and its surroundings
+- **Ideal timing**: During golden hour or overcast skies
+- **Technical tips**: Use a wide-angle lens and adjust camera settings according to the lighting conditions
+- **Unique features**: Kino has a unique architecture and atmosphere
 
-### Location 2: De Pul
-- **Best subjects/angles**: Landscapes, cityscapes
-- **Ideal timing**: Golden hour
-- **Technical tips**: Use a wide-angle lens, adjust exposure compensation
-- **Unique features**: Unique architectural features, street art
+### Location 2: Kaapse Maria
+- **Best subjects/angles**: Kaapse Maria and its surroundings
+- **Ideal timing**: During golden hour or overcast skies
+- **Technical tips**: Use a wide-angle lens and adjust camera settings according to the lighting conditions
+- **Unique features**: Kaapse Maria has a unique architecture and atmosphere
 
-### Location 3: Autotron Rosmalen
-- **Best subjects/angles**: Landscapes, cityscapes
-- **Ideal timing**: Golden hour
-- **Technical tips**: Use a wide-angle lens, adjust exposure compensation
-- **Unique features**: Unique architectural features, street art
+### Location 3: Huis Sonneveld
+- **Best subjects/angles**: Huis Sonneveld and its surroundings
+- **Ideal timing**: During golden hour or overcast skies
+- **Technical tips**: Use a wide-angle lens and adjust camera settings according to the lighting conditions
+- **Unique features**: Huis Sonneveld has a unique architecture and atmosphere
 
 ## 🎯 Sample Photos & Shot Ideas
-### Available Photos
-- [Saxon @ De Pul, Uden](https://farm3.staticflickr.com/2752/5705677331_8b38ce45da.jpg)
-- [Saxon @ De Pul, Uden](https://farm4.staticflickr.com/3104/5705674693_ca3921a37b.jpg)
-- [Vanderbuyst @ De Pul, Uden](https://farm3.staticflickr.com/2443/5705652829_78e8199c1c.jpg)
-- [Saxon @ De Pul, Uden](https://farm4.staticflickr.com/3285/5705675965_52b2d1b612.jpg)
-- [Vanderbuyst @ De Pul, Uden](https://farm4.staticflickr.com/3444/5706217494_f4317f6bd2.jpg)
-- [Luyckx](https://farm5.staticflickr.com/4023/5151611815_9f5e44f091.jpg)
-- [Sportster 883](https://farm2.staticflickr.com/1219/5152231606_ca28685495.jpg)
-- [Triumph Rocket 2300cc!!](https://farm2.staticflickr.com/1358/5151613773_547101b552.jpg)
-- [Night Rod Special](https://farm2.staticflickr.com/1150/5151594187_e069955da6.jpg)
-- [fat a**](https://farm5.staticflickr.com/4091/5152229854_b91b71c4c7.jpg)
-
-### Recommended Shots
-1. Location 1: Capture the unique architectural features during golden hour - Use a wide-angle lens, adjust exposure compensation
-2. Location 2: Capture the unique architectural features during golden hour - Use a wide-angle lens, adjust exposure compensation
-3. Location 3: Capture the unique architectural features during golden hour - Use a wide-angle lens, adjust exposure compensation
-
+### Available Photos for Kino
+- [Saïd Kinos](https://farm66.staticflickr.com/65535/51681227891_358a3ed947.jpg)
+- [kino](https://farm5.staticflickr.com/4834/46916845212_62316e393a.jpg)
+- [Under the viaduct](https://farm66.staticflickr.com/65535/53459293280_514ce425f0.jpg)
+- [Monopole, Schiedam](https://farm5.staticflickr.com/4051/4498839455_ce0a560cdf.jpg)
+- [Cinerama, Rotterdam - front, marquee](https://farm1.staticflickr.com/46/147789841_742548183d.jpg)
+### Available Photos for Kaapse Maria
+- [Kaapse Maria, Rotterdam](https://farm66.staticflickr.com/65535/52078631977_ed07e9abfb.jpg)
+- [IFFR juni 2021](https://farm66.staticflickr.com/65535/51236302174_aa6d4216e3.jpg)
+### Available Photos for Huis Sonneveld
+- [Huis Sonneveld](https://farm66.staticflickr.com/65535/48891663856_8608ceca4e.jpg)
+- [Huis Sonneveld](https://farm66.staticflickr.com/65535/49617517157_5a0bc7b719.jpg)
+- [Huis Sonneveld](https://farm66.staticflickr.com/65535/48901795788_b6850339a5.jpg)
+- [Huis Sonneveld](https://farm66.staticflickr.com/65535/48891841427_ba8c50374d.jpg)
+- [Huis Sonneveld](https://farm66.staticflickr.com/65535/48891841727_4788ff3615.jpg)
 ## ⚠️ Photographer's Notes
-### Equipment Needed
-- Wide-angle lens
-- Tripod
-- Remote shutter release
-
-### Access Information
-- All locations are accessible by car or public transportation
-
-### Safety Considerations
-- Be aware of weather conditions, use protective gear when necessary
-- Be mindful of location-specific safety notes
-- Protect equipment from weather conditions
+- Equipment Needed: Camera, lenses, tripod, and extra batteries
+- Access Information: Check the location's opening hours and access restrictions
+- Safety Considerations: Be aware of the weather and location conditions, and take necessary precautions
