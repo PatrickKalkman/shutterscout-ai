@@ -1,5 +1,7 @@
+import argparse
 from dotenv import load_dotenv
 from loguru import logger
+import sys
 
 from shutterscout_ai.core.shutterscout_agent import get_location_recommendations
 from shutterscout_ai.tools.astronomy.astronomy import get_sunrise_sunset
@@ -48,16 +50,27 @@ def test_tools() -> None:
 
 def main() -> None:
     """Main entry point for the ShutterScout AI application."""
+    parser = argparse.ArgumentParser(description="ShutterScout AI - Photography Location Scout")
+    parser.add_argument("--verbose", action="store_true", help="Enable verbose (debug) output")
+    parser.add_argument("--output", default="photography_location_recommendations.md",
+                      help="Output file path for recommendations (default: photography_location_recommendations.md)")
+    args = parser.parse_args()
+
+    # Configure logger
+    logger.remove()  # Remove default handler
+    log_level = "DEBUG" if args.verbose else "INFO"
+    logger.add(sys.stderr, level=log_level)
+
     logger.info("Starting ShutterScout AI...")
     load_dotenv()
-    logger.info("Environment variables loaded")
+    logger.debug("Environment variables loaded")
 
     # test_tools()
     try:
         logger.info("Getting photography location recommendations...")
         recommendations = get_location_recommendations()
 
-        with open("photography_location_recommendations.md", "w") as f:
+        with open(args.output, "w") as f:
             f.write(recommendations)
 
         logger.info("\nPhotography Location Recommendations:")
