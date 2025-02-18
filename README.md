@@ -11,7 +11,7 @@
 
 Looking for the perfect photo location? ShutterScout.AI combines real-time weather data, sun positions, and local knowledge to find your next perfect shot. No more hours of research – just instant, personalized location recommendations.
 
-Read the full story behind ShutterScout.AI in my [Medium article](https://medium.com/@pkalkman).
+Read the full story behind ShutterScout.AI in my [Medium article](https://medium.com/generative-ai/unlock-stunning-photo-locations-with-this-ai-powered-agent-db18f4a153d2).
 
 ## ✨ Key Features
 
